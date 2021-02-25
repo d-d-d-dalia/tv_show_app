@@ -5,32 +5,16 @@ window.addEventListener("DOMContentLoaded", () => {
     getShows()
 })
 
-function bindEventListeners(){
-    document.querySelector('#shows').addEventListener('click', renderShows)
-}
-
-async function renderShows(){
-    const shows = await apiService.fetchShows();
-    let main = document.getElementById('main')
-    main.innerHTML = ""
-    shows.map(show => {
-        `
-        <li>
-            <a href="#" data-id="${show.id}">${show.name}</a>
-        </li>
-        `
-    })
-    attachClicksToLinks()
-}
-
-
 function getShows() {
-    let main = document.getElementById('main')
-    main.innerHTML = ""
+    let main = document.getElementById('main ul')
+    let info = document.getElementById('info')
+    let showLis = document.getElementById('show-list')
+    info.innerHTML = ""
+    showLis.innerHTML = ""
     fetchShows()
     .then(shows => {
         shows.map(show => {
-        main.innerHTML += `
+        showLis.innerHTML += `
         <li>
             <a href="#" data-id="${show.id}">${show.name}</a>
         </li>
@@ -55,20 +39,23 @@ function attachClicksToLinks(){
 
 async function displayShow(e){
     console.log(e.target)
-    let main = document.getElementById('main')
-    main.innerHTML = ""
+    let info = document.getElementById('info')
+    let showLis = document.getElementById('show-list')
+    showLis.innerHTML = ""
     fetchShow(e.target.dataset.id)
     .then(show => {
-         main.innerHTML = `
+         info.innerHTML = `
         <h1>${show.name}</h1><br/>
         <h3>Summary:</h3>
-        ${show.summary}
+        
+        <p>${show.summary}</p>
         <h3>Network:</h3>
-        ${show.network.name}
+        <p>${show.network.name}</p>
         <h3>Genres:</h3>
-        ${show.genres.join(", ")}
+        <p>${show.genres.join(", ")}</p>
         <h3>url:</h3>
-        ${show.url}`
+        <p>${show.url}</p>
+        `
     })
 }
 
